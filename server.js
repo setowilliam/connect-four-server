@@ -10,9 +10,10 @@ var io = require('socket.io')(http);
 
 io.on('connection', function (socket) {
     console.log('a user connected'); // show when the user connected
-
-    // assign them a temporary user name:
-    let tempUserName = "User-" + Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
+    let userName;
+    socket.on('username', function(un) {
+        userName = un;
+    });
 
     socket.on('disconnect', function () {
         console.log('user disconnected'); // show when the user disconnected
@@ -20,7 +21,7 @@ io.on('connection', function (socket) {
 
     socket.on('chat message', function (msg) { // when the socket recieves a "chat message"
         console.log("user sent: " + msg);
-        io.emit('chat message', JSON.stringify({user: tempUserName, msg: msg})); // send the message back to the users
+        io.emit('chat message', JSON.stringify({user: userName, msg: msg})); // send the message back to the users
     });
 });
 
