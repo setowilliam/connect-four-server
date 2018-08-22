@@ -20,7 +20,7 @@ io.on('connection', function (socket) {
 
     socket.on('chat message', function (msg) { // when the socket recieves a "chat message"
         console.log("user sent: " + msg);
-        io.emit('chat message', tempUserName + ": " + msg); // send the message back to the users
+        io.emit('chat message', JSON.stringify({user: tempUserName, message: msg})); // send the message back to the users
     });
 });
 
