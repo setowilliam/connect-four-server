@@ -59,7 +59,7 @@ io.on('connection', function (socket) {
             if (gameList[i].hostPlayer == game.hostPlayer) {
                 gameList[i].player = player;
                 socket.join(gameList[i].hostPlayer);
-                socket.broadcast.to(gameList[i].hostPlayer).emit('start game');
+                socket.to(gameList[i].hostPlayer).emit('start game');
                 break;
             }
         }
