@@ -57,6 +57,7 @@ io.on('connection', function (socket) {
     socket.on('join game', function (game) {
         for (let i = 0; i < gameList.length; i++) {
             if (gameList[i].hostPlayer == game.hostPlayer) {
+                gameList[i] = game;
                 socket.join(gameList[i].hostPlayer);
                 io.to(gameList[i].hostPlayer).emit('start game');
                 break;
