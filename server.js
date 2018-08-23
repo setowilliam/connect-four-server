@@ -72,6 +72,17 @@ io.on('connection', function (socket) {
         }
     })
 
+    socket.on('leave game', function () {
+        for (let i = 0; i < gameList.length; i++) {
+            if (gameList[i].hostPlayer == socket.id || gameList[i].player == socket.id) {
+                io.to(gameList[i].hostPlayer).emit('leave game');
+                io.emit('remove game', gameList[i].gameName);
+                gameList.splice(i, 1);
+                break;
+            }
+        }
+    })
+
     socket.on('change state', function (column, game, color) {
         for (let i = 0; i < gameList.length; i++) {
             if (gameList[i].hostPlayer == game.hostPlayer) {
@@ -90,11 +101,11 @@ http.listen(HTTP_PORT, () => { // note - we use http here, not app
 });
 
 function initializeGrid() {
-    let grid = {columns: []};
+    let grid = { columns: [] };
     for (let i = 0; i < 7; i++) {
-        grid.columns.push({count: 0, cells: []});
+        grid.columns.push({ count: 0, cells: [] });
         for (let k = 0; k < 6; k++) {
-            grid.columns[i].cells.push({id: k, color: "none", state: 0});
+            grid.columns[i].cells.push({ id: k, color: "none", state: 0 });
         }
     }
     return grid;
