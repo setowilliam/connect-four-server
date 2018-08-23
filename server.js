@@ -13,6 +13,7 @@ io.on('connection', function (socket) {
     console.log('a user connected'); // show when the user connected
     socket.emit('connected user', userList, gameList);
     let userName;
+    let currentGame;
 
     socket.on('username', function(un) {
         userName = un;
@@ -22,11 +23,9 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log('user disconnected'); // show when the user disconnected
-        let index = userList.indexOf(userName);
-        if (index != -1) {
-            userList.splice(index, 1);
-            io.emit('remove user', userName);
-        }
+        userList.splice(userList.indexOf(userName), 1);
+        io.emit('remove user', userName);
+        io.emit('remove game', currentGame);
     });
 
     socket.on('chat message', function (msg) { // when the socket recieves a "chat message"
@@ -36,11 +35,13 @@ io.on('connection', function (socket) {
 
     socket.on('add game', function(game) {
         gameList.push(game);
+        currentGame = game;
         io.emit('add game', game);
     })
 
     socket.on('remove game', function(game) {
         gameList.splice(gameList.indexOf(game), 1);
+        currentGame = "";
         io.emit('remove game', game);
     })
 });
