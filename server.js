@@ -63,11 +63,16 @@ io.on('connection', function (socket) {
                 gameList[i] = game;
                 socket.join(gameList[i].hostPlayer);
                 io.emit('update game', game);
+                gameList[i].grid = initializeGrid();
                 io.to(gameList[i].hostPlayer).emit('start game');
-                startGame(gameList[i]);
                 break;
             }
         }
+    })
+
+    socket.on('change state', function (column, game, color) {
+        grid.columns[column].cells[grid.columns[column].count++].color = color;
+        io.to(game.hostPlayer).emit('change state', (column, grid.columns[column].count));
     })
 });
 
@@ -75,12 +80,6 @@ io.on('connection', function (socket) {
 http.listen(HTTP_PORT, () => { // note - we use http here, not app
     console.log("listening on: " + HTTP_PORT);
 });
-
-
-function startGame(game) {
-    game.grid = initializeGrid();
-    console.log(game.grid);
-}
 
 function initializeGrid() {
     let grid = {columns: []};
