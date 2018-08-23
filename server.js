@@ -8,10 +8,10 @@ app.use(express.static("public"));
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var connectedUsers = [];
-
+var gameList = [];
 io.on('connection', function (socket) {
     console.log('a user connected'); // show when the user connected
-    socket.emit('all connected users', connectedUsers);
+    socket.emit('all data', connectedUsers);
     let userName;
 
     socket.on('username', function(un) {
@@ -33,6 +33,16 @@ io.on('connection', function (socket) {
         console.log("user sent: " + msg);
         io.emit('chat message', JSON.stringify({user: userName, msg: msg})); // send the message back to the users
     });
+
+    socket.on('add game', function(game) {
+        gameList.push(game);
+        io.emit('add game', game);
+    })
+
+    socket.on('remove game', function(game) {
+        gameList.splice(gameList.indexOf(game), 1);
+        io.emit('remove game', game);
+    })
 });
 
 http.listen(HTTP_PORT, () => { // note - we use http here, not app
