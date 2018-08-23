@@ -73,7 +73,6 @@ io.on('connection', function (socket) {
     })
 
     socket.on('leave game', function () {
-        console.log("leave game");
         for (let i = 0; i < gameList.length; i++) {
             if (gameList[i].hostPlayer == socket.id || gameList[i].player == socket.id) {
                 io.to(gameList[i].hostPlayer).emit('leave game');
