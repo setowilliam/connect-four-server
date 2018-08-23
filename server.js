@@ -25,8 +25,8 @@ io.on('connection', function (socket) {
         let index = connectedUsers.indexOf(userName);
         if (index != -1) {
             connectedUsers.splice(index, 1);
+            io.emit('disconnected user', userName);
         }
-        io.emit('disconnected user', userName);
     });
 
     socket.on('chat message', function (msg) { // when the socket recieves a "chat message"
