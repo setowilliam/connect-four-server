@@ -48,10 +48,10 @@ io.on('connection', function (socket) {
         for (let i = 0; i < gameList.length; i++) {
             if (gameList[i].gameName == gameName) {
                 gameList.splice(i, 1);
+                io.emit('remove game', gameName);
                 break;
             }
         }
-        io.emit('remove game', game);
     })
 });
 
