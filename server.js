@@ -53,6 +53,17 @@ io.on('connection', function (socket) {
             }
         }
     })
+
+    socket.on('join game', function (game, player) {
+        for (let i = 0; i < gameList.length; i++) {
+            if (gameList[i].hostPlayer == game.hostPlayer) {
+                gameList[i].player = player;
+                socket.join(gameList[i].hostPlayer);
+                socket.broadcast.to(gameList[i].hostPlayer).emit('start game');
+                break;
+            }
+        }
+    })
 });
 
 http.listen(HTTP_PORT, () => { // note - we use http here, not app
