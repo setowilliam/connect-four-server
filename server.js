@@ -71,8 +71,12 @@ io.on('connection', function (socket) {
     })
 
     socket.on('change state', function (column, game, color) {
-        grid.columns[column].cells[grid.columns[column].count++].color = color;
-        io.to(game.hostPlayer).emit('change state', (column, grid.columns[column].count));
+        for (let i = 0; i < gameList.length; i++) {
+            if (gameList[i].hostPlayer == game.hostPlayer) {
+                gameList[i].grid.columns[column].cells[grid.columns[column].count++].color = color;
+                io.to(game.hostPlayer).emit('change state', (column, gameList[i].grid.columns[column].count));
+            }
+        }
     })
 });
 
