@@ -87,7 +87,7 @@ function initializeGrid() {
     for (let i = 0; i < 7; i++) {
         grid.columns.push({count: 0, cells: []});
         for (let k = 0; k < 6; k++) {
-            grid.columns[k].cells.push({id: k, color: "none", state: 0});
+            grid.columns[i].cells.push({id: k, color: "none", state: 0});
         }
     }
     return grid;
