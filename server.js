@@ -22,13 +22,16 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log('user disconnected'); // show when the user disconnected
-        userList.splice(userList.indexOf(userName), 1);
-        io.emit('remove user', userName);
-        for (let i = 0; i < gameList.length; i++) {
-            if (gameList[i].hostPlayer == socket.id) {
-                gameList.splice(i, 1);
-                io.emit('remove game', gameList[i]);
-                break;
+        let index = userList.indexOf(userName)
+        if (index != -1) {
+            userList.splice(index, 1);
+            io.emit('remove user', userName);
+            for (let i = 0; i < gameList.length; i++) {
+                if (gameList[i].hostPlayer == socket.id) {
+                    gameList.splice(i, 1);
+                    io.emit('remove game', gameList[i]);
+                    break;
+                }
             }
         }
     });
