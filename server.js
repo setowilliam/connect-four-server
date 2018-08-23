@@ -22,7 +22,8 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log('user disconnected'); // show when the user disconnected
-        connectedUsers.splice(connectedUsers.indexOf(userName), 1);
+        let index = connectedUsers.indexOf(userName);
+        connectedUsers.splice(index, 1);
         io.emit('disconnected user', userName);
     });
 
