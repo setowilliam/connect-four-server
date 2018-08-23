@@ -32,6 +32,10 @@ io.on('connection', function (socket) {
                     io.emit('remove game', gameList[i]);
                     break;
                 }
+
+                if (gameList[i].player == socket.id) {
+                    io.to(gameList[i].hostPlayer).emit('leave game');
+                }
             }
         }
     });
