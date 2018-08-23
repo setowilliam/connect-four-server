@@ -71,17 +71,12 @@ io.on('connection', function (socket) {
     })
 
     socket.on('change state', function (column, game, color) {
-        console.log(column)
-        console.log(game)
-        console.log(color)
-        console.log(gameList)
         for (let i = 0; i < gameList.length; i++) {
-            console.log(gameList[i].hostPlayer)
-            console.log(game.hostPlayer)
             if (gameList[i].hostPlayer == game.hostPlayer) {
                 gameList[i].grid.columns[column].cells[gameList[i].grid.columns[column].count].color = color;
                 gameList[i].grid.columns[column].count++;
-                io.to(game.hostPlayer).emit('change state', (column, gameList[i].grid.columns[column].count));
+                io.to(game.hostPlayer).emit('change state', column, gameList[i].grid.columns[column].count);
+                break;
             }
         }
     })
