@@ -7,25 +7,25 @@ app.use(express.static("public"));
 // setup socket.io
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var connectedUsers = [];
+var userList = [];
 var gameList = [];
 io.on('connection', function (socket) {
     console.log('a user connected'); // show when the user connected
-    socket.emit('all data', connectedUsers);
+    socket.emit('connect');
     let userName;
 
     socket.on('username', function(un) {
         userName = un;
-        connectedUsers.push(userName);
-        io.emit('connected user', userName);
+        userList.push(userName);
+        io.emit('add user', userName);
     });
 
     socket.on('disconnect', function () {
         console.log('user disconnected'); // show when the user disconnected
-        let index = connectedUsers.indexOf(userName);
+        let index = userList.indexOf(userName);
         if (index != -1) {
             connectedUsers.splice(index, 1);
-            io.emit('disconnected user', userName);
+            io.emit('remove user', userName);
         }
     });
 
