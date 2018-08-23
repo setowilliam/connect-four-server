@@ -71,6 +71,9 @@ io.on('connection', function (socket) {
     })
 
     socket.on('change state', function (column, game, color) {
+        console.log(column)
+        console.log(game)
+        console.log(color)
         for (let i = 0; i < gameList.length; i++) {
             if (gameList[i].hostPlayer == game.hostPlayer) {
                 gameList[i].grid.columns[column].cells[gameList[i].grid.columns[column].count].color = color;
