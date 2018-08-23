@@ -25,6 +25,7 @@ io.on('connection', function (socket) {
         console.log('user disconnected'); // show when the user disconnected
         userList.splice(userList.indexOf(userName), 1);
         io.emit('remove user', userName);
+        gameList.splice(gameList.indexOf(currentGame), 1);
         io.emit('remove game', currentGame);
     });
 
