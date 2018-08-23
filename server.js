@@ -44,9 +44,9 @@ io.on('connection', function (socket) {
         io.emit('add game', gameObj);
     })
 
-    socket.on('remove game', function (game) {
+    socket.on('remove game', function (gameName) {
         for (let i = 0; i < gameList.length; i++) {
-            if (gameList[i].hostPlayer == game.hostPlayer) {
+            if (gameList[i].gameName == gameName) {
                 gameList.splice(i, 1);
                 break;
             }
