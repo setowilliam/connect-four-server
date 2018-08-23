@@ -39,7 +39,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('add game', function (game) {
-        let gameObj = { gameName: game, hostPlayer: socket.id };
+        let gameObj = { gameName: game, hostPlayer: socket.id, status: true };
         gameList.push(gameObj);
         io.emit('add game', gameObj);
     })
@@ -54,10 +54,9 @@ io.on('connection', function (socket) {
         }
     })
 
-    socket.on('join game', function (game, player) {
+    socket.on('join game', function (game) {
         for (let i = 0; i < gameList.length; i++) {
             if (gameList[i].hostPlayer == game.hostPlayer) {
-                gameList[i].player = player;
                 socket.join(gameList[i].hostPlayer);
                 io.to(gameList[i].hostPlayer).emit('start game');
                 break;
