@@ -59,6 +59,7 @@ io.on('connection', function (socket) {
             if (gameList[i].hostPlayer == game.hostPlayer) {
                 gameList[i] = game;
                 socket.join(gameList[i].hostPlayer);
+                io.emit('update game', game);
                 io.to(gameList[i].hostPlayer).emit('start game');
                 break;
             }
