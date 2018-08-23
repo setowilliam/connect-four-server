@@ -28,9 +28,9 @@ io.on('connection', function (socket) {
             io.emit('remove user', userName);
             for (let i = 0; i < gameList.length; i++) {
                 if (gameList[i].hostPlayer == socket.id || gameList[i].player == socket.id) {
-                    gameList.splice(i, 1);
                     io.to(gameList[i].hostPlayer).emit('leave game');
                     io.emit('remove game', gameList[i]);
+                    gameList.splice(i, 1);
                     break;
                 }
             }
