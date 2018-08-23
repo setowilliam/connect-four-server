@@ -11,7 +11,7 @@ var userList = [];
 var gameList = [];
 io.on('connection', function (socket) {
     console.log('a user connected'); // show when the user connected
-    socket.emit('connect');
+    socket.emit('connect', userList, gameList);
     let userName;
 
     socket.on('username', function(un) {
