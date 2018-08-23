@@ -30,7 +30,7 @@ io.on('connection', function (socket) {
                 if (gameList[i].hostPlayer == socket.id || gameList[i].player == socket.id) {
                     console.log(gameList[i])
                     io.to(gameList[i].hostPlayer).emit('leave game');
-                    io.emit('remove game', gameList[i]);
+                    io.emit('remove game', gameList[i].gameName);
                     gameList.splice(i, 1);
                     break;
                 }
