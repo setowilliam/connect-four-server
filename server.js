@@ -64,12 +64,31 @@ io.on('connection', function (socket) {
                 socket.join(gameList[i].hostPlayer);
                 io.emit('update game', game);
                 io.to(gameList[i].hostPlayer).emit('start game');
+                startGame(gameList[i]);
                 break;
             }
         }
     })
 });
 
+
 http.listen(HTTP_PORT, () => { // note - we use http here, not app
     console.log("listening on: " + HTTP_PORT);
 });
+
+
+function startGame(game) {
+    game.grid = initializeGrid();
+    console.log(game.grid);
+}
+
+function initializeGrid() {
+    let grid = {columns: []};
+    for (let i = 0; i < 7; i++) {
+        grid.columns.push({count: 0, cells: []});
+        for (let k = 0; k < 6; k++) {
+            grid.columns[k].cells.push({id: k, color: "none", state: 0});
+        }
+    }
+    return grid;
+}
