@@ -13,9 +13,8 @@ io.on('connection', function (socket) {
     console.log('a user connected'); // show when the user connected
     socket.emit('connected user', userList, gameList);
     let userName;
-    let currentGame;
 
-    socket.on('username', function(un) {
+    socket.on('username', function (un) {
         userName = un;
         userList.push(userName);
         io.emit('add user', userName);
@@ -25,24 +24,33 @@ io.on('connection', function (socket) {
         console.log('user disconnected'); // show when the user disconnected
         userList.splice(userList.indexOf(userName), 1);
         io.emit('remove user', userName);
-        gameList.splice(gameList.indexOf(currentGame), 1);
-        io.emit('remove game', currentGame);
+        for (let i = 0; i < gameList.length; i++) {
+            if (gameList[i].hostPlayer == socket.id) {
+                gameList.splice(i, 1);
+                io.emit('remove game', gameList[i]);
+                break;
+            }
+        }
     });
 
     socket.on('chat message', function (msg) { // when the socket recieves a "chat message"
         console.log("user sent: " + msg);
-        io.emit('chat message', JSON.stringify({user: userName, msg: msg})); // send the message back to the users
+        io.emit('chat message', JSON.stringify({ user: userName, msg: msg })); // send the message back to the users
     });
 
-    socket.on('add game', function(game) {
-        gameList.push(game);
-        currentGame = game;
-        io.emit('add game', game);
+    socket.on('add game', function (game) {
+        let gameObj = { gameName: game, hostPlayer: socket.id };
+        gameList.push(gameObj);
+        io.emit('add game', gameObj);
     })
 
-    socket.on('remove game', function(game) {
-        gameList.splice(gameList.indexOf(game), 1);
-        currentGame = "";
+    socket.on('remove game', function (game) {
+        for (let i = 0; i < gameList.length; i++) {
+            if (gameList[i].hostPlayer == game.hostPlayer) {
+                gameList.splice(i, 1);
+                break;
+            }
+        }
         io.emit('remove game', game);
     })
 });
